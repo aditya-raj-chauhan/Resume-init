@@ -7,7 +7,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +22,13 @@ import static com.devotee.resume.init.util.AppConstants.*;
 public class ResumeController {
     private final ResumeService resumeService;
     @PostMapping
-    public ResponseEntity<?>createResume( @Valid @RequestBody CreateResumeRequest request){
+    public ResponseEntity<?>createResume(@Valid @RequestBody CreateResumeRequest request, Authentication authentication){
+
+//        call the service method to create a resume
+       Resume newResume= resumeService.createResume(request,authentication.getPrincipal());
+
+        //then simply return the response
+        return ResponseEntity.status(HttpStatus.CREATED).body(newResume);
 
     }
 
