@@ -34,27 +34,32 @@ public class ResumeController {
 
     @GetMapping
     public ResponseEntity<?>getUserResumes(){
+        return null;
 
     }
 
     @GetMapping(ID)
     public ResponseEntity<?>getUserResumeById(@PathVariable String id){
+        return null;
 
     }
 
     @PutMapping(ID)
     public ResponseEntity<?>updateResume(@PathVariable String id ,@RequestBody Resume newData){
+        return null;
 
     }
 
     @PutMapping(UPLOAD_IMAGES)
 
     public ResponseEntity<?>uploadResumeImages(@PathVariable String id , @RequestPart(value = "thumbnail" ,required = true)MultipartFile thumbnail, @RequestPart(value = "profileImage",required = false)MultipartFile profileImage, HttpServletRequest request){
+        return null;
 
     }
 
     @DeleteMapping(ID)
     public ResponseEntity<?>deleteResume(@PathVariable String id){
+        return null;
 
 
     }

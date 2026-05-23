@@ -33,6 +33,8 @@ public class ResumeService {
         setDefaultResumeData(newResume);
 //        step 5 save the resume data
 
+       return resumeRepository.save(newResume);
+
 
     }
 
