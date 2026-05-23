@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -48,5 +49,62 @@ public class ResumeService {
         newResume.setCertifications(new ArrayList<>());
         newResume.setLanguages(new ArrayList<>());
         newResume.setIntrest(new ArrayList<>());
+    }
+
+    public List<Resume> getUserResumes(Object principal) {
+//        step 1 : get the current profile
+       AuthResponse response= authService.getProfile(principal);
+
+//        step 2 : call the repo finder method and return the response
+       return resumeRepository.findByUserIdOrderByUpdatedAtDesc(response.getId());
+
+//
+    }
+
+    public Resume getResumeById(String id, Object principal) {
+//        step 1 : get the current profile
+      AuthResponse response=  authService.getProfile(principal);
+//        step 2: call the repository finder method
+        Resume existingResume=resumeRepository.findByUserIdAndId(response.getId(),id)
+                .orElseThrow(()->new RuntimeException("resume not found "));
+//        step 3: return response
+        return existingResume;
+
+    }
+
+    public Resume updateResume(String id, Resume newData, Object principal) {
+        //step 1: we need to get the current profile
+        AuthResponse response=authService.getProfile(principal);
+        //step 2: call the repo finder method by userId and resume id
+      Resume existingResume=  resumeRepository.findByUserIdAndId(response.getId(),id).orElseThrow(()->new RuntimeException("resume not found "));
+        //step 3: update the new data
+        existingResume.setTitle(newData.getTitle());
+        existingResume.setThumbnailLink(newData.getThumbnailLink());
+        existingResume.setTemplate(newData.getTemplate());
+        existingResume.setProfileInfo(newData.getProfileInfo());
+        existingResume.setContactInfo(newData.getContactInfo());
+        existingResume.setWorkExperiences(newData.getWorkExperiences());
+        existingResume.setEducation(newData.getEducation());
+        existingResume.setSkills(newData.getSkills());
+        existingResume.setProjects(newData.getProjects());
+        existingResume.setCertifications(newData.getCertifications());
+        existingResume.setLanguages(newData.getLanguages());
+        existingResume.setIntrest(newData.getIntrest());
+
+
+        //step 4: save in db
+        resumeRepository.save(existingResume);
+        //step 5: return the response
+        return existingResume;
+    }
+
+    public void deleteResume(String id, Object principal) {
+        // get the current profile
+       AuthResponse response= authService.getProfile(principal);
+        // call the repo  finder method
+       Resume existingResume= resumeRepository.findByUserIdAndId(response.getId(),id).orElseThrow(()->new RuntimeException("not found"));
+       resumeRepository.delete(existingResume);
+        //
+
     }
 }
