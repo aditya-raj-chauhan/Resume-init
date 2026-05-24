@@ -20,7 +20,7 @@ public class TemplatesController {
     @GetMapping
     public ResponseEntity<?>getTemplates(Authentication authentication){
         //call the service method
-       Map<String,String>response= templatesService.getTemplates(authentication.getPrincipal());
+       Map<String,Object>response= templatesService.getTemplates(authentication.getPrincipal());
 
         //return the response
         return ResponseEntity.ok(response);
